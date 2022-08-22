@@ -1,0 +1,64 @@
+body {
+  padding: 50px;
+}
+h1 {
+  text-align: center;
+  font-family: "Courgette", cursive;
+}
+
+.create_task_block {
+  width: 100%;
+  max-width: 694px;
+  padding-bottom: 20px;
+  margin: auto;
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.create_task_block div {
+  padding-top: 30px;
+  position: relative;
+}
+.err_empty_name {
+  position: absolute;
+  color: red;
+  bottom: -20px;
+  left: 10px;
+  opacity: 0;
+}
+.todo_list {
+  list-style: none;
+  padding: 0;
+}
+.todo_list li {
+  display: flex;
+  flex-direction: column;
+  border-top: 4px solid #58ac83;
+  box-shadow: 2px 2px 2px #e6edf7;
+  border-radius: 5px;
+  padding: 0px 20px;
+  margin-top: 20px;
+}
+.todo_list li div {
+  display: flex;
+  align-items: center;
+  padding-top: 12px;
+}
+.todo_list li span {
+  padding-left: 10px;
+  font-size: 14px;
+  color: #878787;
+}
+.todo_list li h5 {
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 16px;
+  margin-bottom: 0;
+  padding-left: 8px;
+}
+.todo_list li p {
+  padding-left: 20px;
+  font-size: 12px;
+}
