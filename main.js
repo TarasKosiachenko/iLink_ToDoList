@@ -1,14 +1,14 @@
 const todos = [
-  { 
-    id: 1,
-    name: "task 1",
+  {
+    id: 5,
+    name: "task 5",
     done: true,
     deskription: "delete this task",
     date: new Date("2022-08-22"),
   },
   {
-    id: 2,
-    name: "task 2",
+    id: 8,
+    name: "task 8",
     done: false,
     deskription: " task done this task done this task done this task done this task",
     date: new Date("2022-08-26"),
@@ -29,8 +29,8 @@ const todoList = document.querySelector(".todo_list");
 
 function renderList() {
   todoList.innerHTML = todos
-  .map((todo) => {
-    return `<li>
+    .map((todo) => {
+      return `<li id=${todo.id}>
     <div class="${(todo.date < Date.now()) ? "overdue" : ""}">
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M10.4998 2.33325H3.49984C2.21117 2.33325 1.1665 3.37792 1.1665 4.66659V10.4999C1.1665 11.7886 2.21117 12.8333 3.49984 12.8333H10.4998C11.7885 12.8333 12.8332 11.7886 12.8332 10.4999V4.66659C12.8332 3.37792 11.7885 2.33325 10.4998 2.33325Z" stroke="#878787" stroke-linecap="round" stroke-linejoin="round"/>
@@ -49,43 +49,57 @@ function renderList() {
     </div>
     <button type="button" class="btn btn-outline-danger delete_task">x</button>
   </li>`;
-  })
-  .join("");
+    })
+    .join("");
 };
 renderList();
 
-const update = () => renderList()
-
-  document.querySelector(".createTodo").addEventListener("click", () => {
-    if(todoName.value.length) {
-      todos.push({
-        name: todoName.value,
-        done: false,
-        deskription: todoDescription.value,
-        date: new Date(`${todoDate.value}`),
-      });
-
-      todoName.value = "";
-      todoDescription.value = "";
-      todoDate.value = "";
-    } else {
-      let errText = document.querySelector(".err_empty_name");
-      errText.style.opacity = "1";
-      errText.style.transition = "all 1s ease-out";
-      todoName.style.border = "1px solid red";
-      todoName.style.transition = "all 1s ease-out";
-      setTimeout(() => errText.style.opacity = "", 2000);
-      setTimeout(() => todoName.style.border = "", 2000);
-    }
-    update();
-  });
-
-  var del= document.getElementsByClassName("delete_task");
-
-for( var i=0;i<del.length;i++){
-	del[i].addEventListener("click", deleteListElement);
+const update = () => {
+  renderList()
+  console.log(todos);
 }
 
-  function deleteListElement() {
-    this.parentElement.remove();
+document.querySelector(".createTodo").addEventListener("click", () => {
+  if (todoName.value.length) {
+    todos.push({
+      id: Math.floor(Math.random() * 1000),
+      name: todoName.value,
+      done: false,
+      deskription: todoDescription.value,
+      date: new Date(`${todoDate.value}`),
+    });
+
+    todoName.value = "";
+    todoDescription.value = "";
+    todoDate.value = "";
+  } else {
+    let errText = document.querySelector(".err_empty_name");
+    errText.style.opacity = "1";
+    errText.style.transition = "all 1s ease-out";
+    todoName.style.border = "1px solid red";
+    todoName.style.transition = "all 1s ease-out";
+    setTimeout(() => errText.style.opacity = "", 2000);
+    setTimeout(() => todoName.style.border = "", 2000);
   }
+  update();
+  let del = document.getElementsByClassName("delete_task");
+
+  for (let i = 0; i < del.length; i++) {
+    del[i].addEventListener("click", deleteListElement);
+  }
+});
+
+let del = document.getElementsByClassName("delete_task");
+
+for (let i = 0; i < del.length; i++) {
+  del[i].addEventListener("click", deleteListElement);
+}
+
+function deleteListElement() {
+  let index = todos.map(x => {
+    return x.id;
+  }).indexOf(Number(this.parentElement.id));
+
+  todos.splice(index, 1);
+  this.parentElement.remove();
+}
