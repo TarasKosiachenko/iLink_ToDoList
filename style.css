@@ -41,7 +41,7 @@ h1 {
   position: relative;
   display: flex;
   flex-direction: column;
-  border-top: 4px solid #58ac83;
+  border-top: 4px solid #D9D9D9;
   box-shadow: 2px 2px 2px #e6edf7;
   border-radius: 5px;
   padding: 0px 20px;
@@ -73,15 +73,25 @@ h1 {
   font-size: 12px;
 }
 
-input[type=checkbox]:checked+h5 {
+input[type='checkbox'] {
+  accent-color: #489670;
+}
+
+input[type=checkbox]:checked + h5 {
   color: #878787;
   text-decoration: line-through;
 }
 
+.done{
+  border-top: 4px solid #58AC83 !important;
+}
+
+.overdue {
+  border-top: 4px solid #ff0000 !important;
+}
 .overdue span {
   color: #ff0000 !important;
 }
-
 .overdue svg path {
   stroke: #ff0000 !important;
 }

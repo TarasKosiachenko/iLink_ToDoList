@@ -1,24 +1,31 @@
 const todos = [
   {
-    id: 5,
-    name: "task 5",
-    done: true,
+    id: 1,
+    name: "Learn Node.js",
+    done: false,
     deskription: "delete this task",
     date: new Date("2022-08-22"),
   },
   {
-    id: 8,
-    name: "task 8",
+    id: 2,
+    name: "Learn JavaScript",
     done: false,
+    date: "",
     deskription: " task done this task done this task done this task done this task",
-    date: new Date("2022-08-26"),
   },
   {
     id: 3,
-    name: "task 3",
-    done: true,
-    deskription: "ores at, maiores consequatur.20",
+    name: "Learn React",
+    done: false,
     date: new Date("2022-08-27"),
+    deskription: "",
+  },
+  {
+    id: 4,
+    name: "Learn TypeScript",
+    done: false,
+    date: new Date("2022-08-29"),
+    deskription: "gfgfdhfsfsdghsdgsdg asdfdwf",
   },
 ];
 
@@ -30,22 +37,22 @@ const todoList = document.querySelector(".todo_list");
 function renderList() {
   todoList.innerHTML = todos
     .map((todo) => {
-      return `<li id=${todo.id}>
-    <div class="${(todo.date < Date.now()) ? "overdue" : ""}">
+      return `<li onclick="changeTargetInput(event)" id=${todo.id} class="${(todo.date instanceof Date && todo.date < Date.now()) ? "overdue" : ""}">
+    <div>
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M10.4998 2.33325H3.49984C2.21117 2.33325 1.1665 3.37792 1.1665 4.66659V10.4999C1.1665 11.7886 2.21117 12.8333 3.49984 12.8333H10.4998C11.7885 12.8333 12.8332 11.7886 12.8332 10.4999V4.66659C12.8332 3.37792 11.7885 2.33325 10.4998 2.33325Z" stroke="#878787" stroke-linecap="round" stroke-linejoin="round"/>
       <path d="M4.6665 1.16663V3.49996M9.33317 1.16663V3.49996M1.1665 5.83329H12.8332" stroke="#878787" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
-      <span>${todo.date.toISOString().split('T')[0]}</span>
+      <span>${(todo.date instanceof Date) ? todo.date.toISOString().split('T')[0] : ''}</span>
     </div>
 
     <div>
-      <input type="checkbox" ${todo.done ? "checked" : ""}>
-      <h5>${todo.name}</h5>
+      <input class='inputTask' type="checkbox" ${todo.done ? "checked" : ""}>
+      <h5>${todo.name ? todo.name : ''}</h5>
     </div>
 
     <div>
-      <p>${todo.deskription}</p>
+      <p>${todo.deskription ? todo.deskription : ''}</p>
     </div>
     <button type="button" class="btn btn-outline-danger delete_task">x</button>
   </li>`;
@@ -66,7 +73,7 @@ document.querySelector(".createTodo").addEventListener("click", () => {
       name: todoName.value,
       done: false,
       deskription: todoDescription.value,
-      date: new Date(`${todoDate.value}`),
+      date: todoDate.value.length ? new Date(`${todoDate.value}`) : '',
     });
 
     todoName.value = "";
@@ -96,10 +103,18 @@ for (let i = 0; i < del.length; i++) {
 }
 
 function deleteListElement() {
-  let index = todos.map(x => {
-    return x.id;
+  let index = todos.map(todo => {
+    return todo.id;
   }).indexOf(Number(this.parentElement.id));
 
   todos.splice(index, 1);
   this.parentElement.remove();
+}
+
+const inputTask = document.querySelector(".inputTask");
+function changeTargetInput(event) {
+  event.stopPropagation();
+  if(event.target.className === 'inputTask') {
+    event.currentTarget.classList.toggle('done')
+  }
 }
