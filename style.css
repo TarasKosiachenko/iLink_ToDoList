@@ -1,6 +1,8 @@
 body {
   padding: 50px;
+  color: #262837;
 }
+
 h1 {
   text-align: center;
   font-family: "Courgette", cursive;
@@ -21,6 +23,7 @@ h1 {
   padding-top: 30px;
   position: relative;
 }
+
 .err_empty_name {
   position: absolute;
   color: red;
@@ -28,11 +31,14 @@ h1 {
   left: 10px;
   opacity: 0;
 }
+
 .todo_list {
   list-style: none;
   padding: 0;
 }
+
 .todo_list li {
+  position: relative;
   display: flex;
   flex-direction: column;
   border-top: 4px solid #58ac83;
@@ -41,16 +47,19 @@ h1 {
   padding: 0px 20px;
   margin-top: 20px;
 }
+
 .todo_list li div {
   display: flex;
   align-items: center;
   padding-top: 12px;
 }
+
 .todo_list li span {
   padding-left: 10px;
   font-size: 14px;
   color: #878787;
 }
+
 .todo_list li h5 {
   font-weight: 700;
   font-size: 14px;
@@ -58,7 +67,30 @@ h1 {
   margin-bottom: 0;
   padding-left: 8px;
 }
+
 .todo_list li p {
   padding-left: 20px;
   font-size: 12px;
+}
+
+input[type=checkbox]:checked+h5 {
+  color: #878787;
+  text-decoration: line-through;
+}
+
+.overdue span {
+  color: #ff0000 !important;
+}
+
+.overdue svg path {
+  stroke: #ff0000 !important;
+}
+
+.btn-outline-danger {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  padding: 5px !important;
+  line-height: 7px !important;
+  border-radius: 30px !important;
 }
