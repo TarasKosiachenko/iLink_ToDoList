@@ -1,15 +1,49 @@
+const coaching = [
+  {
+    id: 1,
+    name: "basketball",
+    done: false,
+    deskription: "",
+    date: new Date("2022-08-22"),
+  },
+  {
+    id: 2,
+    name: "voleyball",
+    done: true,
+    date: "",
+    deskription: " task done this task done this task",
+  },
+  {
+    id: 3,
+    name: "runing",
+    done: false,
+    date: new Date("2022-08-27"),
+    deskription: "",
+  },
+  {
+    id: 4,
+    name: "swimming",
+    done: false,
+    date: new Date("2022-08-29"),
+    deskription: "gfgfdhfsfsdghsdgsdg asdfdwf",
+  },
+];
+
+const workoutList = document.querySelector(".workout_list");
+
+///////////////////////////
 const todos = [
   {
     id: 1,
     name: "Learn Node.js",
     done: false,
-    deskription: "delete this task",
+    deskription: "",
     date: new Date("2022-08-22"),
   },
   {
     id: 2,
     name: "Learn JavaScript",
-    done: false,
+    done: true,
     date: "",
     deskription: " task done this task done this task done this task done this task",
   },
@@ -34,10 +68,10 @@ const todoDate = document.querySelector(".input_date");
 const todoDescription = document.querySelector(".input_desc");
 const todoList = document.querySelector(".todo_list");
 
-function renderList() {
-  todoList.innerHTML = todos
+function renderList(blockList, array) {
+  blockList.innerHTML = array
     .map((todo) => {
-      return `<li onclick="changeTargetInput(event)" id=${todo.id} class="${(todo.date instanceof Date && todo.date < Date.now()) ? "overdue" : ""}">
+      return `<li onclick="changeTargetInput(event)" id=${todo.id} class="${(todo.date instanceof Date && todo.date < Date.now()) ? "overdue" : ""} ${todo.done ? "done" : ""}">
     <div>
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M10.4998 2.33325H3.49984C2.21117 2.33325 1.1665 3.37792 1.1665 4.66659V10.4999C1.1665 11.7886 2.21117 12.8333 3.49984 12.8333H10.4998C11.7885 12.8333 12.8332 11.7886 12.8332 10.4999V4.66659C12.8332 3.37792 11.7885 2.33325 10.4998 2.33325Z" stroke="#878787" stroke-linecap="round" stroke-linejoin="round"/>
@@ -47,7 +81,7 @@ function renderList() {
     </div>
 
     <div>
-      <input class='inputTask' type="checkbox" ${todo.done ? "checked" : ""}>
+      <input class='checkboxTask' type="checkbox" ${todo.done ? "checked" : ""}>
       <h5>${todo.name ? todo.name : ''}</h5>
     </div>
 
@@ -59,17 +93,17 @@ function renderList() {
     })
     .join("");
 };
-renderList();
+renderList(todoList, todos);
+renderList(workoutList, coaching);
 
 const update = () => {
-  renderList()
-  console.log(todos);
+  renderList(todoList, todos);
 }
 
 document.querySelector(".createTodo").addEventListener("click", () => {
   if (todoName.value.length) {
     todos.push({
-      id: Math.floor(Math.random() * 1000),
+      id: Math.floor(Math.random() * 10000),
       name: todoName.value,
       done: false,
       deskription: todoDescription.value,
@@ -111,10 +145,33 @@ function deleteListElement() {
   this.parentElement.remove();
 }
 
-const inputTask = document.querySelector(".inputTask");
+// const inputTask = document.querySelector(".checkboxTask");
 function changeTargetInput(event) {
   event.stopPropagation();
-  if(event.target.className === 'inputTask') {
+  if(event.target.className === 'checkboxTask') {
     event.currentTarget.classList.toggle('done')
   }
 }
+
+
+function changeTargerRadioTodo(event) {
+  event.stopPropagation();
+  if(event.target.id === 'btnradio2') {
+    document.querySelector(".todo_list").classList.remove('show-done')
+  } else if (event.target.id === 'btnradio1') {
+    document.querySelector(".todo_list").classList.add('show-done')
+  }
+}
+
+
+
+// ---------arrow-------
+function closeTodoList() {
+  document.querySelector(".close_todo_arrow").classList.toggle("show");
+  document.querySelector(".todo_list").classList.toggle("close_task");
+}
+function closeWorkoutList() {
+  document.querySelector(".close_workout_arrow").classList.toggle("show");
+  document.querySelector(".workout_list").classList.toggle("close_task");
+}
+// --------------------
