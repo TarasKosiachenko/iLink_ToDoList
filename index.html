@@ -35,7 +35,7 @@
         <span class="err_empty_name">enter a task title</span>
       </div>
 
-      <div style="width: 130px">
+      <div style="width: 140px">
         <label for="formGroupExampleInput2" class="form-label">Due date</label>
         <input
           type="date"
@@ -58,7 +58,7 @@
 
       <div>
         <button
-          style="width: 130px"
+          style="width: 140px"
           type="submit"
           class="btn btn-primary createTodo"
         >
@@ -76,7 +76,7 @@
         </svg>
         </span>
         <div
-          onclick="changeTargerRadioTodo(event)"
+          onclick="changeTargerRadio(event)"
           class="btn-group"
           role="group"
           aria-label="Basic radio toggle button group"
@@ -99,7 +99,9 @@
           <label class="btn btn-outline-primary" for="btnradio1">All</label>
         </div>
       </div>
-      <ul class="todo_list"></ul>
+        <p class="empty_todo_list_text">List is Empty</p>
+      <ul class="todo_list">
+      </ul>
     </div>
 
     <div class="list_body">
@@ -111,6 +113,7 @@
         </svg>
         </span>
         <div
+          onclick="changeTargerRadio(event)"
           class="btn-group"
           role="group"
           aria-label="Basic radio toggle button group"
@@ -119,20 +122,21 @@
             type="radio"
             class="btn-check"
             name="workout"
-            id="workout3"
+            id="workout1"
             checked
           />
-          <label class="btn btn-outline-primary" for="workout3">Undone</label>
+          <label class="btn btn-outline-primary" for="workout1">Undone</label>
 
           <input
             type="radio"
             class="btn-check"
             name="workout"
-            id="workout4"
+            id="workout2"
           />
-          <label class="btn btn-outline-primary" for="workout4">All</label>
+          <label class="btn btn-outline-primary" for="workout2">All</label>
         </div>
       </div>
+      <p class="empty_workout_list_text">List is Empty</p>
       <ul class="workout_list"></ul>
     </div>
 

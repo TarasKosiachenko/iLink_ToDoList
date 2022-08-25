@@ -28,9 +28,6 @@ const coaching = [
     deskription: "gfgfdhfsfsdghsdgsdg asdfdwf",
   },
 ];
-
-const workoutList = document.querySelector(".workout_list");
-
 ///////////////////////////
 const todos = [
   {
@@ -67,6 +64,7 @@ const todoName = document.querySelector(".input_name");
 const todoDate = document.querySelector(".input_date");
 const todoDescription = document.querySelector(".input_desc");
 const todoList = document.querySelector(".todo_list");
+const workoutList = document.querySelector(".workout_list");
 
 function renderList(blockList, array) {
   blockList.innerHTML = array
@@ -107,7 +105,7 @@ document.querySelector(".createTodo").addEventListener("click", () => {
       name: todoName.value,
       done: false,
       deskription: todoDescription.value,
-      date: todoDate.value.length ? new Date(`${todoDate.value}`) : '',
+      date: todoDate.value ? new Date(`${todoDate.value}`) : ''
     });
 
     todoName.value = "";
@@ -128,39 +126,59 @@ document.querySelector(".createTodo").addEventListener("click", () => {
   for (let i = 0; i < del.length; i++) {
     del[i].addEventListener("click", deleteListElement);
   }
+  isEmptyList()
 });
 
 let del = document.getElementsByClassName("delete_task");
-
 for (let i = 0; i < del.length; i++) {
   del[i].addEventListener("click", deleteListElement);
 }
-
 function deleteListElement() {
   let index = todos.map(todo => {
     return todo.id;
   }).indexOf(Number(this.parentElement.id));
-
   todos.splice(index, 1);
   this.parentElement.remove();
+
+  isEmptyList()
 }
 
-// const inputTask = document.querySelector(".checkboxTask");
+function isEmptyList() {
+  if (todoList.clientHeight === 0) { 
+    document.querySelector(".empty_todo_list_text").style.display = "block"
+  } else if (todoList.clientHeight !== 0) {
+    document.querySelector(".empty_todo_list_text").style.display = "none"
+  }
+  if (workoutList.clientHeight === 0) {
+    document.querySelector(".empty_workout_list_text").style.display = "block"
+  } else if (workoutList.clientHeight !== 0) {
+    document.querySelector(".empty_workout_list_text").style.display = "none"
+  }
+}
+isEmptyList()
+
 function changeTargetInput(event) {
   event.stopPropagation();
   if(event.target.className === 'checkboxTask') {
+    const t = todos.find(t => t.id === Number(event.currentTarget.id))
+    t.done = !t.done;
     event.currentTarget.classList.toggle('done')
   }
+  isEmptyList()
 }
 
-
-function changeTargerRadioTodo(event) {
+function changeTargerRadio(event) {
   event.stopPropagation();
   if(event.target.id === 'btnradio2') {
     document.querySelector(".todo_list").classList.remove('show-done')
   } else if (event.target.id === 'btnradio1') {
     document.querySelector(".todo_list").classList.add('show-done')
+  } else if(event.target.id === 'workout1') {
+    workoutList.classList.remove('show-done')
+  } else if (event.target.id === 'workout2') {
+    workoutList.classList.add('show-done')
   }
+  isEmptyList()
 }
 
 
@@ -172,6 +190,6 @@ function closeTodoList() {
 }
 function closeWorkoutList() {
   document.querySelector(".close_workout_arrow").classList.toggle("show");
-  document.querySelector(".workout_list").classList.toggle("close_task");
+  workoutList.classList.toggle("close_task");
 }
 // --------------------
