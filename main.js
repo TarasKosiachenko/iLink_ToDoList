@@ -1,75 +1,74 @@
-const coaching = [
-  {
-    id: 1,
-    name: "basketball",
-    done: false,
-    deskription: "",
-    date: new Date("2022-08-22"),
-  },
-  {
-    id: 2,
-    name: "voleyball",
-    done: true,
-    date: "",
-    deskription: " task done this task done this task",
-  },
-  {
-    id: 3,
-    name: "runing",
-    done: false,
-    date: new Date("2022-08-27"),
-    deskription: "",
-  },
-  {
-    id: 4,
-    name: "swimming",
-    done: false,
-    date: new Date("2022-08-29"),
-    deskription: "gfgfdhfsfsdghsdgsdg asdfdwf",
-  },
-];
-///////////////////////////
-
-
 const todoName = document.querySelector(".input_name");
 const todoDate = document.querySelector(".input_date");
 const todoDescription = document.querySelector(".input_desc");
 const todoList = document.querySelector(".todo_list");
 const workoutList = document.querySelector(".workout_list");
 
-let todos = []
-const contactsEndpoint = 'http://localhost:5000/todos';
+let todos = [];
+const contactsEndpoint = "http://localhost:5000/todos/";
 
-function getTask() {
-  return  fetch(contactsEndpoint)
-  .then(response => response.json())
-  .then(resArr => {
-    // resArr.forEach(element => todos.push(element))
-    todos = resArr;
-    renderList(todoList, todos);
-    isEmptyList()
-    console.log(todos);
-  })
+function getServerTask() {
+  return fetch(contactsEndpoint)
+    .then((response) => response.json())
+    .then((resArr) => {
+      todos = resArr;
+      renderList(todoList, todos);
+      isEmptyList();
+    });
 }
+getServerTask();
 
-function createTask(todo) {
+function createServerTask(todo) {
   return fetch(contactsEndpoint, {
-      method: 'POST',
-      headers:  {
-          'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(todo)
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(todo),
   })
-  .then(response => response.json())
-  .then(renderList(todoList, todos))
+    .then((response) => response.json())
+    .then((resArr) => {
+      todos = resArr;
+      renderList(todoList, todos);
+      isEmptyList();
+    });
 }
 
-getTask()
+function updateServerTask(id, todo) {
+  return fetch(contactsEndpoint + id, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+    },
+    body: JSON.stringify(todo),
+  })
+    .then((response) => response.json())
+    .then((resArr) => {
+      todos = resArr;
+      renderList(todoList, todos);
+    });
+}
+
+function deleteServerTask(id) {
+  return fetch(contactsEndpoint + id, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+    },
+  })
+    .then((response) => response.json())
+    .then((resArr) => {
+      todos = resArr;
+      renderList(todoList, todos);
+    });
+}
 
 function renderList(blockList, array) {
   blockList.innerHTML = array
     .map((todo) => {
-      return `<li onclick="changeTargetInput(event)" id=${todo.id} class="${(new Date(todo.date) < Date.now()) ? "overdue" : ""} ${todo.done ? "done" : ""}">
+      return `<li onclick="changeTargetInput(event)" id=${todo.id} class="${
+        new Date(todo.date) < Date.now() ? "overdue" : ""
+      } ${todo.done ? "done" : ""}">
     <div>
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M10.4998 2.33325H3.49984C2.21117 2.33325 1.1665 3.37792 1.1665 4.66659V10.4999C1.1665 11.7886 2.21117 12.8333 3.49984 12.8333H10.4998C11.7885 12.8333 12.8332 11.7886 12.8332 10.4999V4.66659C12.8332 3.37792 11.7885 2.33325 10.4998 2.33325Z" stroke="#878787" stroke-linecap="round" stroke-linejoin="round"/>
@@ -80,46 +79,39 @@ function renderList(blockList, array) {
 
     <div>
       <input class='checkboxTask' type="checkbox" ${todo.done ? "checked" : ""}>
-      <h5>${todo.name ? todo.name : ''}</h5>
+      <h5>${todo.name ? todo.name : ""}</h5>
     </div>
 
     <div>
-      <p>${todo.deskription ? todo.deskription : ''}</p>
+      <p>${todo.deskription ? todo.deskription : ""}</p>
     </div>
-    <button type="button" class="btn btn-outline-danger delete_task">x</button>
+    <button type="button" onclick="deleteListElement(event)" class="btn btn-outline-danger delete_task">x</button>
   </li>`;
     })
     .join("");
-};
-// renderList(workoutList, coaching);
-
-function getFormDate(date) {
-  if(date === '' || date === null) {
-    return 'no date'
-  } else {
-    return new Date(date).toISOString().split('T')[0]
-  }
 }
 
-// const update = () => {
-//   renderList(todoList, todos);
-// }
+function getFormDate(date) {
+  if (date === "" || date === null) {
+    return "no date";
+  } else {
+    return new Date(date).toISOString().split("T")[0];
+  }
+}
 
 document.querySelector(".createTodo").addEventListener("click", () => {
   if (todoName.value.length) {
     const todo = {
       name: todoName.value,
       deskription: todoDescription.value,
-      date: todoDate.value ? todoDate.value : ''
+      date: todoDate.value ? todoDate.value : "",
     };
 
-    createTask(todo)
-    .then(renderList(todoList, todos))
-    .then(getTask())
+    createServerTask(todo).then(() => {
+      renderList(todoList, todos);
+      isEmptyList();
+    });
 
-    // .then(getTask().then())
-    // .then(renderList(todoList, todos))
-    // update();
     todoName.value = "";
     todoDescription.value = "";
     todoDate.value = "";
@@ -129,70 +121,60 @@ document.querySelector(".createTodo").addEventListener("click", () => {
     errText.style.transition = "all 1s ease-out";
     todoName.style.border = "1px solid red";
     todoName.style.transition = "all 1s ease-out";
-    setTimeout(() => errText.style.opacity = "", 2000);
-    setTimeout(() => todoName.style.border = "", 2000);
+    setTimeout(() => (errText.style.opacity = ""), 2000);
+    setTimeout(() => (todoName.style.border = ""), 2000);
   }
-
-  // let del = document.getElementsByClassName("delete_task");
-  for (let i = 0; i < del.length; i++) {
-    del[i].addEventListener("click", deleteListElement);
-  }
-  isEmptyList()
 });
 
-let del = document.getElementsByClassName("delete_task");
-for (let i = 0; i < del.length; i++) {
-  del[i].addEventListener("click", deleteListElement);
-}
-function deleteListElement() {
-  let index = todos.map(todo => {
-    return todo.id;
-  }).indexOf(Number(this.parentElement.id));
-  todos.splice(index, 1);
-  this.parentElement.remove();
-  isEmptyList()
+function deleteListElement(event) {
+  deleteServerTask(event.path[1].id).then(() => {
+    renderList(todoList, todos);
+    isEmptyList();
+  });
 }
 
 function isEmptyList() {
   if (todoList.clientHeight === 0) {
-    document.querySelector(".empty_todo_list_text").style.display = "block"
+    document.querySelector(".empty_todo_list_text").style.display = "block";
   } else if (todoList.clientHeight !== 0) {
-    document.querySelector(".empty_todo_list_text").style.display = "none"
+    document.querySelector(".empty_todo_list_text").style.display = "none";
   }
   if (workoutList.clientHeight === 0) {
-    document.querySelector(".empty_workout_list_text").style.display = "block"
+    document.querySelector(".empty_workout_list_text").style.display = "block";
   } else if (workoutList.clientHeight !== 0) {
-    document.querySelector(".empty_workout_list_text").style.display = "none"
+    document.querySelector(".empty_workout_list_text").style.display = "none";
   }
 }
-isEmptyList()
 
 function changeTargetInput(event) {
   event.stopPropagation();
-  if(event.target.className === 'checkboxTask') {
-    const t = todos.find(t => t.id === Number(event.currentTarget.id))
-    t.done = !t.done;
-    event.currentTarget.classList.toggle('done')
+  if (event.target.className === "checkboxTask") {
+    const t = todos.find((t) => t.id === Number(event.currentTarget.id));
+    const todo = {
+      done: !t.done,
+    };
+    updateServerTask(Number(event.currentTarget.id), todo).then(() => {
+      renderList(todoList, todos);
+      isEmptyList();
+    });
+    event.currentTarget.classList.toggle("done");
   }
-  isEmptyList()
 }
 
 function changeTargerRadio(event) {
   event.stopPropagation();
-  if(event.target.id === 'btnradio2') {
-    document.querySelector(".todo_list").classList.remove('show-done')
-  } else if (event.target.id === 'btnradio1') {
-    document.querySelector(".todo_list").classList.add('show-done')
+  if (event.target.id === "btnradio2") {
+    document.querySelector(".todo_list").classList.remove("show-done");
+  } else if (event.target.id === "btnradio1") {
+    document.querySelector(".todo_list").classList.add("show-done");
   }
-  if(event.target.id === 'workout1') {
-    workoutList.classList.remove('show-done')
-  } else if (event.target.id === 'workout2') {
-    workoutList.classList.add('show-done')
+  if (event.target.id === "workout1") {
+    workoutList.classList.remove("show-done");
+  } else if (event.target.id === "workout2") {
+    workoutList.classList.add("show-done");
   }
-  isEmptyList()
+  isEmptyList();
 }
-
-
 
 // ---------arrow-------
 function closeTodoList() {

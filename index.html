@@ -72,8 +72,10 @@
         <h2>Study</h2>
         <span onclick="closeTodoList()" class="close_arrow close_todo_arrow">
           <svg class="arrow-bottom-3" viewBox="0 0 5 9">
-            <path d="M0.419,9.000 L0.003,8.606 L4.164,4.500 L0.003,0.394 L0.419,0.000 L4.997,4.500 L0.419,9.000 Z" />
-        </svg>
+            <path
+              d="M0.419,9.000 L0.003,8.606 L4.164,4.500 L0.003,0.394 L0.419,0.000 L4.997,4.500 L0.419,9.000 Z"
+            />
+          </svg>
         </span>
         <div
           onclick="changeTargerRadio(event)"
@@ -99,18 +101,22 @@
           <label class="btn btn-outline-primary" for="btnradio1">All</label>
         </div>
       </div>
-        <p class="empty_todo_list_text">List is Empty</p>
-      <ul class="todo_list">
-      </ul>
+      <p class="empty_todo_list_text">List is Empty</p>
+      <ul class="todo_list"></ul>
     </div>
 
     <div class="list_body">
       <div class="list_header">
         <h2>Train</h2>
-        <span onclick="closeWorkoutList()" class="close_arrow close_workout_arrow">
+        <span
+          onclick="closeWorkoutList()"
+          class="close_arrow close_workout_arrow"
+        >
           <svg class="arrow-bottom-3" viewBox="0 0 5 9">
-            <path d="M0.419,9.000 L0.003,8.606 L4.164,4.500 L0.003,0.394 L0.419,0.000 L4.997,4.500 L0.419,9.000 Z" />
-        </svg>
+            <path
+              d="M0.419,9.000 L0.003,8.606 L4.164,4.500 L0.003,0.394 L0.419,0.000 L4.997,4.500 L0.419,9.000 Z"
+            />
+          </svg>
         </span>
         <div
           onclick="changeTargerRadio(event)"
@@ -127,12 +133,7 @@
           />
           <label class="btn btn-outline-primary" for="workout1">Undone</label>
 
-          <input
-            type="radio"
-            class="btn-check"
-            name="workout"
-            id="workout2"
-          />
+          <input type="radio" class="btn-check" name="workout" id="workout2" />
           <label class="btn btn-outline-primary" for="workout2">All</label>
         </div>
       </div>

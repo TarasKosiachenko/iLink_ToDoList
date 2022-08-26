@@ -1,5 +1,5 @@
 const express = require("express");
-const cors = require('cors');
+const cors = require("cors");
 const app = express();
 
 function logRequest({ method, url }, res, next) {
@@ -11,7 +11,10 @@ app.use(express.json());
 app.use(logRequest);
 app.use(cors());
 
-const inc = (init = 0) => () => ++init;
+const inc =
+  (init = 0) =>
+  () =>
+    ++init;
 const genId = inc();
 
 const todos = [
@@ -27,7 +30,8 @@ const todos = [
     name: "Learn JavaScript",
     done: true,
     date: "",
-    deskription: " task done this task done this task done this task done this task",
+    deskription:
+      " task done this task done this task done this task done this task",
   },
   {
     id: genId(),
@@ -55,17 +59,37 @@ const createTask = (data) => {
   };
 };
 
-
-// Getting a list of all todos > curl localhost:5000/todos
 app.get("/todos", (req, res) => res.json(todos));
 
-// Creating a new todos > curl localhost:5000/todos -d '{ "title": "Generate ID" }' -H 'Content-type: application/json'
 app.post("/todos", (req, res) => {
   const todo = createTask(req.body);
   todos.push(todo);
-  res.json(todo);
+  res.json(todos);
 });
 
+app.patch("/todos/:id", (req, res) => {
+  const todoId = parseInt(req.params.id);
+  const todo = todos.find((t) => t.id === todoId);
+
+  if (todo) {
+    Object.assign(todo, req.body);
+    res.json(todos);
+  } else {
+    res.status(404).json({ error: "Task not found" });
+  }
+});
+
+app.delete("/todos/:id", (req, res) => {
+  const { id } = req.params;
+  const itemIndex = todos.findIndex((p) => p.id == id);
+  const todo = todos.find((t) => t.id == id);
+  if (todo) {
+    todos.splice(itemIndex, 1);
+    res.json(todos);
+  } else {
+    res.status(404).json({ error: "Task not found" });
+  }
+});
 
 const port = 5000;
 app.listen(port, () => {
