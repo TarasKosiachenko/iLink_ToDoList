@@ -50,7 +50,7 @@ const createTask = (data) => {
     id: genId(),
     name: data.name,
     done: false,
-    date: data.due_date,
+    date: data.date,
     deskription: data.deskription,
   };
 };

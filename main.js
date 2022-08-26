@@ -29,36 +29,7 @@ const coaching = [
   },
 ];
 ///////////////////////////
-// const todos = [
-//   {
-//     id: 1,
-//     name: "Learn Node.js",
-//     done: false,
-//     deskription: "",
-//     date: new Date("2022-08-22"),
-//   },
-//   {
-//     id: 2,
-//     name: "Learn JavaScript",
-//     done: true,
-//     date: "",
-//     deskription: " task done this task done this task done this task done this task",
-//   },
-//   {
-//     id: 3,
-//     name: "Learn React",
-//     done: false,
-//     date: new Date("2022-08-27"),
-//     deskription: "",
-//   },
-//   {
-//     id: 4,
-//     name: "Learn TypeScript",
-//     done: false,
-//     date: new Date("2022-08-29"),
-//     deskription: "gfgfdhfsfsdghsdgsdg asdfdwf",
-//   },
-// ];
+
 
 const todoName = document.querySelector(".input_name");
 const todoDate = document.querySelector(".input_date");
@@ -66,17 +37,34 @@ const todoDescription = document.querySelector(".input_desc");
 const todoList = document.querySelector(".todo_list");
 const workoutList = document.querySelector(".workout_list");
 
-const todos = []
-function getTasks() {
-  return fetch('http://localhost:5000/todos')
-    .then(response => response.json())
-    .then(resArr => {
-      resArr.forEach(element => todos.push(element))
-      renderList(todoList, todos);
-      console.log(todos);
-    })
+let todos = []
+const contactsEndpoint = 'http://localhost:5000/todos';
+
+function getTask() {
+  return  fetch(contactsEndpoint)
+  .then(response => response.json())
+  .then(resArr => {
+    // resArr.forEach(element => todos.push(element))
+    todos = resArr;
+    renderList(todoList, todos);
+    isEmptyList()
+    console.log(todos);
+  })
 }
-getTasks().then()
+
+function createTask(todo) {
+  return fetch(contactsEndpoint, {
+      method: 'POST',
+      headers:  {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(todo)
+  })
+  .then(response => response.json())
+  .then(renderList(todoList, todos))
+}
+
+getTask()
 
 function renderList(blockList, array) {
   blockList.innerHTML = array
@@ -103,31 +91,35 @@ function renderList(blockList, array) {
     })
     .join("");
 };
-// renderList(todoList, todos);
-renderList(workoutList, coaching);
+// renderList(workoutList, coaching);
 
 function getFormDate(date) {
   if(date === '' || date === null) {
-    return 'not specify'
+    return 'no date'
   } else {
     return new Date(date).toISOString().split('T')[0]
   }
 }
 
-const update = () => {
-  renderList(todoList, todos);
-}
+// const update = () => {
+//   renderList(todoList, todos);
+// }
 
 document.querySelector(".createTodo").addEventListener("click", () => {
   if (todoName.value.length) {
-    todos.push({
-      id: Math.floor(Math.random() * 10000),
+    const todo = {
       name: todoName.value,
-      done: false,
       deskription: todoDescription.value,
-      date: todoDate.value ? new Date(`${todoDate.value}`) : ''
-    });
+      date: todoDate.value ? todoDate.value : ''
+    };
 
+    createTask(todo)
+    .then(renderList(todoList, todos))
+    .then(getTask())
+
+    // .then(getTask().then())
+    // .then(renderList(todoList, todos))
+    // update();
     todoName.value = "";
     todoDescription.value = "";
     todoDate.value = "";
@@ -140,9 +132,8 @@ document.querySelector(".createTodo").addEventListener("click", () => {
     setTimeout(() => errText.style.opacity = "", 2000);
     setTimeout(() => todoName.style.border = "", 2000);
   }
-  update();
-  let del = document.getElementsByClassName("delete_task");
 
+  // let del = document.getElementsByClassName("delete_task");
   for (let i = 0; i < del.length; i++) {
     del[i].addEventListener("click", deleteListElement);
   }
@@ -159,12 +150,11 @@ function deleteListElement() {
   }).indexOf(Number(this.parentElement.id));
   todos.splice(index, 1);
   this.parentElement.remove();
-
   isEmptyList()
 }
 
 function isEmptyList() {
-  if (todoList.clientHeight === 0) { 
+  if (todoList.clientHeight === 0) {
     document.querySelector(".empty_todo_list_text").style.display = "block"
   } else if (todoList.clientHeight !== 0) {
     document.querySelector(".empty_todo_list_text").style.display = "none"
@@ -193,7 +183,8 @@ function changeTargerRadio(event) {
     document.querySelector(".todo_list").classList.remove('show-done')
   } else if (event.target.id === 'btnradio1') {
     document.querySelector(".todo_list").classList.add('show-done')
-  } else if(event.target.id === 'workout1') {
+  }
+  if(event.target.id === 'workout1') {
     workoutList.classList.remove('show-done')
   } else if (event.target.id === 'workout2') {
     workoutList.classList.add('show-done')
