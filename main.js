@@ -9,12 +9,20 @@ const contactsEndpoint = "http://localhost:5000/todos/";
 
 function getServerTask() {
   return fetch(contactsEndpoint)
-    .then((response) => response.json())
+  .then(function (response) {
+    showStatusCode(response.status)
+    return response.json()
+  })
     .then((resArr) => {
       todos = resArr;
       renderList(todoList, todos);
       isEmptyList();
-    });
+    })
+    .catch(function (error) {
+      showStatusCode(error)
+      console.log('error', error)
+    })
+
 }
 getServerTask();
 
@@ -143,6 +151,20 @@ function isEmptyList() {
     document.querySelector(".empty_workout_list_text").style.display = "block";
   } else if (workoutList.clientHeight !== 0) {
     document.querySelector(".empty_workout_list_text").style.display = "none";
+  }
+}
+
+function showStatusCode(status) {
+  if(status !== 200) {
+    document.querySelector(".alert-danger").style.opacity = "1";
+    setTimeout(function () {
+      document.querySelector(".alert-danger").style.opacity = "0";
+    }, 3000);
+  } else if (status == 200) {
+    document.querySelector(".alert-success").style.opacity = "1";
+    setTimeout(function () {
+      document.querySelector(".alert-success").style.opacity = "0";
+    }, 3000);
   }
 }
 

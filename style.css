@@ -152,10 +152,9 @@ li.overdue svg path {
   transition: all 1s;
 }
 
-
 .close_arrow {
   position: absolute;
-  left: 115px;
+  right: 140px;
   bottom: 10px;
   transition: all 0.5s;
 }
@@ -188,3 +187,22 @@ li.overdue svg path {
 .empty_workout_list_text {
   text-align: center;
 }
+
+
+.alert-success {
+  position: fixed !important;
+  transition: all 1s;
+  right: 15px;
+  top: 15px;
+  width: 191px;
+  z-index: 1001;
+}
+.alert-danger {
+  position: fixed !important;
+  transition: all 1s;
+  right: 15px;
+  top: 15px;
+  width: 191px;
+  z-index: 1001;
+}
+
