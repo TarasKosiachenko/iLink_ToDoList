@@ -8,6 +8,7 @@ let todos = [];
 const contactsEndpoint = "http://localhost:5000/tasks/";
 
 function getServerTask() {
+  spinnerLoader('add')
   return fetch(contactsEndpoint)
   .then(function (response) {
     showStatusCode(response.status)
@@ -27,6 +28,7 @@ function getServerTask() {
 getServerTask();
 
 function createServerTask(todo) {
+  spinnerLoader('add')
   return fetch(contactsEndpoint, {
     method: "POST",
     headers: {
@@ -105,17 +107,15 @@ function getFormDate(date) {
 
 document.querySelector(".createTodo").addEventListener("click", () => {
   if (todoName.value.length) {
+    spinnerLoader('add')
     const todo = {
       name: todoName.value,
       deskription: todoDescription.value,
-      due_date: todoDate.value ? todoDate.value : "",
+      due_date: todoDate.value ? todoDate.value : null,
       list_id: 1
     };
 
-    createServerTask(todo).then(() => {
-      renderList(todoList, todos);
-      isEmptyList();
-    });
+    createServerTask(todo)
 
     todoName.value = "";
     todoDescription.value = "";
@@ -129,9 +129,11 @@ document.querySelector(".createTodo").addEventListener("click", () => {
     setTimeout(() => (errText.style.opacity = ""), 2000);
     setTimeout(() => (todoName.style.border = ""), 2000);
   }
+  spinnerLoader('remove')
 });
 
 function deleteListElement(event) {
+  spinnerLoader('add')
   deleteServerTask(event.path[1].id).then(() => {
     renderList(todoList, todos);
     isEmptyList();
@@ -152,6 +154,7 @@ function isEmptyList() {
 }
 
 function showStatusCode(status) {
+  spinnerLoader('remove')
   if(status !== 200) {
     document.querySelector(".alert-danger").style.opacity = "1";
     setTimeout(function () {
@@ -168,6 +171,7 @@ function showStatusCode(status) {
 function changeTargetInput(event) {
   event.stopPropagation();
   if (event.target.className === "checkboxTask") {
+    spinnerLoader('add')
     const t = todos.find((t) => t.id === Number(event.currentTarget.id));
     const todo = {
       done: !t.done,
@@ -176,7 +180,16 @@ function changeTargetInput(event) {
       renderList(todoList, todos);
       isEmptyList();
     });
-    // event.currentTarget.classList.toggle("done");
+  }
+}
+
+function spinnerLoader(status) {
+  if (status == 'add') {
+  document.querySelector(".spinner_loader").classList.add("d-flex")
+  document.querySelector("body").classList.add("lock");
+  } else if (status == 'remove') {
+  document.querySelector(".spinner_loader").classList.remove("d-flex");
+  document.querySelector("body").classList.remove("lock");
   }
 }
 

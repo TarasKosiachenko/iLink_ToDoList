@@ -1,6 +1,24 @@
 body {
   padding: 50px;
   color: #262837;
+  position: relative;
+  min-height: 100vh;
+}
+body.lock {
+  overflow: hidden;
+}
+
+.spinner_loader {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  align-items: center;
+  background: #333333a8;
+  z-index: 1000;
+  color: #fff !important;
+  display: none;
 }
 
 h1 {
