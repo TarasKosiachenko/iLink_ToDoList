@@ -4,26 +4,13 @@ body {
   position: relative;
   min-height: 100vh;
 }
-body.lock {
-  overflow: hidden;
-}
 
-.spinner_loader {
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  align-items: center;
-  background: #333333a8;
-  z-index: 1000;
-  color: #fff !important;
-  display: none;
-}
-
-h1 {
-  text-align: center;
-  font-family: "Courgette", cursive;
+.spinner-border {
+  color: #333;
+  padding-top: 0 !important;
+  --bs-spinner-width: 1rem !important;
+  --bs-spinner-height: 1rem !important;
+  --bs-spinner-border-width: 0.15em !important;
 }
 
 .create_task_block {
@@ -157,7 +144,9 @@ li.overdue svg path {
   position: absolute;
   right: 10px;
   top: 10px;
-  padding: 5px 6px 7px !important;
+  width: 20px;
+  height: 20px;
+  padding: 0 !important;
   line-height: 7px !important;
   border-radius: 30px !important;
 }
@@ -214,6 +203,7 @@ li.overdue svg path {
   top: 15px;
   width: 191px;
   z-index: 1001;
+  display: none !important;
 }
 .alert-danger {
   position: fixed !important;
@@ -222,5 +212,6 @@ li.overdue svg path {
   top: 15px;
   width: 191px;
   z-index: 1001;
+  display: none !important;
 }
 

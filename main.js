@@ -8,7 +8,6 @@ let todos = [];
 const contactsEndpoint = "http://localhost:5000/tasks/";
 
 function getServerTask() {
-  spinnerLoader('add')
   return fetch(contactsEndpoint)
   .then(function (response) {
     showStatusCode(response.status)
@@ -28,7 +27,6 @@ function getServerTask() {
 getServerTask();
 
 function createServerTask(todo) {
-  spinnerLoader('add')
   return fetch(contactsEndpoint, {
     method: "POST",
     headers: {
@@ -91,7 +89,7 @@ function renderList(blockList, array) {
     <div>
       <p>${todo.deskription ? todo.deskription : ""}</p>
     </div>
-    <button type="button" onclick="deleteListElement(event)" class="btn btn-outline-danger delete_task">x</button>
+    <button type="button" onclick="deleteListElement(event)" class="btn btn-outline-danger delete_task">X</button>
   </li>`;
     })
     .join("");
@@ -107,7 +105,11 @@ function getFormDate(date) {
 
 document.querySelector(".createTodo").addEventListener("click", () => {
   if (todoName.value.length) {
-    spinnerLoader('add')
+    const a = document.createElement("div")
+    a.className = "spinner-border"
+    a.style.color = '#fff'
+    document.querySelector(".createTodo").append(a)
+
     const todo = {
       name: todoName.value,
       deskription: todoDescription.value,
@@ -129,11 +131,13 @@ document.querySelector(".createTodo").addEventListener("click", () => {
     setTimeout(() => (errText.style.opacity = ""), 2000);
     setTimeout(() => (todoName.style.border = ""), 2000);
   }
-  spinnerLoader('remove')
 });
 
 function deleteListElement(event) {
-  spinnerLoader('add')
+  const a = document.createElement("div")
+    a.className = "spinner-border"
+    event.path[0].innerHTML = ''
+    event.path[0].append(a)
   deleteServerTask(event.path[1].id).then(() => {
     renderList(todoList, todos);
     isEmptyList();
@@ -154,15 +158,20 @@ function isEmptyList() {
 }
 
 function showStatusCode(status) {
-  spinnerLoader('remove')
+  document.querySelector(".spinner-border") ? document.querySelector(".spinner-border").remove() : '';
+
   if(status !== 200) {
+    document.querySelector(".alert-danger").classList.add("d-flex")
     document.querySelector(".alert-danger").style.opacity = "1";
     setTimeout(function () {
+      document.querySelector(".alert-danger").classList.remove("d-flex")
       document.querySelector(".alert-danger").style.opacity = "0";
     }, 3000);
   } else if (status == 200) {
+    document.querySelector(".alert-success").classList.add("d-flex")
     document.querySelector(".alert-success").style.opacity = "1";
     setTimeout(function () {
+      document.querySelector(".alert-success").classList.remove("d-flex")
       document.querySelector(".alert-success").style.opacity = "0";
     }, 3000);
   }
@@ -171,7 +180,13 @@ function showStatusCode(status) {
 function changeTargetInput(event) {
   event.stopPropagation();
   if (event.target.className === "checkboxTask") {
-    spinnerLoader('add')
+    const a = document.createElement("div")
+    a.className = "spinner-border"
+    a.style.position = 'absolute'
+    a.style.top = '50%'
+    a.style.left = '0'
+    event.path[2].append(a)
+
     const t = todos.find((t) => t.id === Number(event.currentTarget.id));
     const todo = {
       done: !t.done,
@@ -180,16 +195,6 @@ function changeTargetInput(event) {
       renderList(todoList, todos);
       isEmptyList();
     });
-  }
-}
-
-function spinnerLoader(status) {
-  if (status == 'add') {
-  document.querySelector(".spinner_loader").classList.add("d-flex")
-  document.querySelector("body").classList.add("lock");
-  } else if (status == 'remove') {
-  document.querySelector(".spinner_loader").classList.remove("d-flex");
-  document.querySelector("body").classList.remove("lock");
   }
 }
 
@@ -218,3 +223,4 @@ function closeWorkoutList() {
   workoutList.classList.toggle("close_task");
 }
 // --------------------
+
